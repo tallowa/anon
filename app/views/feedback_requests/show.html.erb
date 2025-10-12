@@ -1,0 +1,54 @@
+<div class="min-h-screen bg-gray-50">
+  <nav class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <%= link_to "← Back to Dashboard", dashboard_path, class: "text-gray-700 hover:text-gray-900" %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="bg-white shadow sm:rounded-lg">
+      <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          Share Your Feedback Link
+        </h3>
+        <div class="mt-2 max-w-xl text-sm text-gray-500">
+          <p>Share this link with colleagues to receive anonymous feedback.</p>
+        </div>
+        <div class="mt-5">
+          <div class="rounded-md bg-gray-50 px-6 py-5 sm:flex sm:items-start sm:justify-between">
+            <div class="sm:flex sm:items-start flex-1">
+              <div class="mt-3 sm:mt-0 sm:ml-4 flex-1">
+                <div class="text-sm font-medium text-gray-900" id="feedback-url">
+                  <%= @feedback_request.shareable_url %>
+                </div>
+                <div class="mt-1 text-sm text-gray-500 sm:flex sm:items-center">
+                  <div>Responses: <%= @feedback_request.response_count %></div>
+                  <span class="hidden sm:mx-2 sm:inline" aria-hidden="true">•</span>
+                  <div class="mt-1 sm:mt-0">Expires: <%= @feedback_request.expires_at.strftime("%B %d, %Y") %></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 sm:mt-0 sm:ml-6 sm:flex-shrink-0">
+              <button onclick="copyToClipboard()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                Copy Link
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function copyToClipboard() {
+  const url = document.getElementById('feedback-url').textContent.trim();
+  navigator.clipboard.writeText(url).then(() => {
+    alert('Link copied to clipboard!');
+  });
+}
+</script>

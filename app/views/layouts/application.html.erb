@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AnonymousFeedback</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="turbo-visit-control" content="reload">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+     <% if flash[:notice] %>
+      <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+        <p class="text-sm text-green-700 break-all">
+          <%= flash[:notice] %>
+        </p>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+        <p class="text-sm text-red-700">
+          <%= flash[:alert] %>
+        </p>
+      </div>
+    <% end %>
+    
+    <%= yield %>
+  </body>
+</html>

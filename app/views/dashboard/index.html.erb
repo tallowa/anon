@@ -1,0 +1,104 @@
+<div class="min-h-screen bg-gray-50">
+  <nav class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <h1 class="text-xl font-bold">Anonymous Feedback</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+          <%= link_to "My Feedback", my_feedback_path, class: "text-gray-700 hover:text-gray-900" %>
+          <%= link_to "Requests", feedback_requests_path, class: "text-gray-700 hover:text-gray-900" %>
+          <%= link_to "Invite Team", invites_path, class: "text-gray-700 hover:text-gray-900" %>
+          <%= button_to "Logout", logout_path, method: :delete, class: "text-gray-700 hover:text-gray-900" %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Dashboard</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+              <div class="flex items-center">
+                <div class="flex-1">
+                  <dt class="text-sm font-medium text-gray-500 truncate">
+                    Total Feedback Received
+                  </dt>
+                  <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                    <%= @total_responses %>
+                  </dd>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+              <div class="flex items-center">
+                <div class="flex-1">
+                  <dt class="text-sm font-medium text-gray-500 truncate">
+                    Active Requests
+                  </dt>
+                  <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                    <%= @recent_requests.count %>
+                  </dd>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+              <%= link_to feedback_requests_path, method: :post, class: "block" do %>
+                <dt class="text-sm font-medium text-indigo-600 truncate">
+                  Create New Request
+                </dt>
+                <dd class="mt-1 text-lg font-semibold text-indigo-600">
+                  + New Feedback Link
+                </dd>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% if @recent_requests.any? %>
+        <div class="bg-white shadow overflow-hidden sm:rounded-md">
+          <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              Recent Feedback Requests
+            </h3>
+          </div>
+          <ul class="divide-y divide-gray-200">
+            <% @recent_requests.each do |request| %>
+              <li>
+                <%= link_to feedback_request_path(request), class: "block hover:bg-gray-50" do %>
+                  <div class="px-4 py-4 sm:px-6">
+                    <div class="flex items-center justify-between">
+                      <div class="flex-1">
+                        <p class="text-sm font-medium text-indigo-600 truncate">
+                          <%= request.shareable_url %>
+                        </p>
+                        <p class="mt-2 flex items-center text-sm text-gray-500">
+                          <span class="truncate">
+                            <%= request.response_count %> responses • 
+                            Created <%= time_ago_in_words(request.created_at) %> ago •
+                            Expires <%= time_ago_in_words(request.expires_at) %> from now
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

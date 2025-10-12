@@ -1,0 +1,39 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch("DB_USERNAME") { `whoami`.strip } %>
+  password: <%= ENV["DB_PASSWORD"] %>
+  host: <%= ENV.fetch("DB_HOST", "localhost") %>
+
+development:
+  primary:
+    <<: *default
+    database: feedback_identity_dev
+  
+  feedback:
+    <<: *default
+    database: feedback_anonymous_dev
+    migrations_paths: db/feedback_migrate
+
+test:
+  primary:
+    <<: *default
+    database: feedback_identity_test
+  
+  feedback:
+    <<: *default
+    database: feedback_anonymous_test
+    migrations_paths: db/feedback_migrate
+
+production:
+  primary:
+    <<: *default
+    database: feedback_identity_prod
+    url: <%= ENV['PRIMARY_DATABASE_URL'] %>
+  
+  feedback:
+    <<: *default
+    database: feedback_anonymous_prod
+    url: <%= ENV['FEEDBACK_DATABASE_URL'] %>
+    migrations_paths: db/feedback_migrate

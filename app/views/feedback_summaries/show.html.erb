@@ -1,0 +1,50 @@
+<div class="min-h-screen bg-gray-50">
+  <nav class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <%= link_to "← Back to Dashboard", dashboard_path, class: "text-gray-700 hover:text-gray-900" %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">My Feedback</h2>
+
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <p class="text-sm text-blue-800">
+          <strong>Total Responses: <%= @total_responses %></strong>
+        </p>
+        <% unless @can_view %>
+          <p class="text-sm text-blue-700 mt-2">
+            You need at least 3 responses before feedback is revealed (to protect anonymity).
+          </p>
+        <% end %>
+      </div>
+
+      <% if @can_view %>
+        <div class="space-y-6">
+          <% @all_responses.each do |response| %>
+            <div class="bg-white shadow rounded-lg p-6">
+              <div class="flex items-start justify-between mb-4">
+                <span class="text-sm text-gray-500"><%= response.fuzzy_time %></span>
+              </div>
+              <div class="prose max-w-none">
+                <%= simple_format(response.content) %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="bg-white shadow rounded-lg p-8 text-center">
+          <p class="text-gray-500">
+            Keep sharing your feedback link! You'll see responses once you have at least 3.
+          </p>
+          <%= link_to "View My Requests", feedback_requests_path, class: "mt-4 inline-block text-indigo-600 hover:text-indigo-500" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

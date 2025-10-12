@@ -1,0 +1,88 @@
+<div class="min-h-screen bg-gray-50">
+  <nav class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <%= link_to "← Back to Dashboard", dashboard_path, class: "text-gray-700 hover:text-gray-900" %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Team Invites</h2>
+        
+        <div class="bg-white shadow sm:rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              Invite Team Members
+            </h3>
+            <div class="mt-2 max-w-xl text-sm text-gray-500">
+              <p>Invite colleagues from <%= current_user.company.email_domain %> to join your team.</p>
+            </div>
+            
+            <%= form_with model: Identity::Invite.new, url: invites_path, data: { turbo: false }, class: "mt-5 sm:flex sm:items-center" do |f| %>
+              <div class="w-full sm:max-w-xs">
+                <%= f.email_field :email,
+                    class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md",
+                    placeholder: "colleague@#{current_user.company.domain}",
+                    required: true %>
+              </div>
+              <%= f.submit "Send Invite",
+                  class: "mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <% if @pending_invites.any? %>
+        <div class="bg-white shadow overflow-hidden sm:rounded-md">
+          <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              Pending Invites
+            </h3>
+          </div>
+          <ul class="divide-y divide-gray-200">
+            <% @pending_invites.each do |invite| %>
+              <li class="px-4 py-4 sm:px-6">
+                <div class="flex items-center justify-between">
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">
+                      <%= invite.email %>
+                    </p>
+                    <p class="mt-1 text-sm text-gray-500">
+                      Sent <%= time_ago_in_words(invite.created_at) %> ago •
+                      Expires <%= time_ago_in_words(invite.expires_at) %> from now
+                    </p>
+                    <div class="mt-3 flex items-center space-x-2">
+                      <input type="text" readonly value="<%= register_url(invite.token) %>" 
+                             id="invite-<%= invite.id %>"
+                             class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md bg-gray-50 font-mono">
+                      <button onclick="copyInviteUrl('<%= invite.id %>')"
+                              class="px-3 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700">
+                        Copy
+                      </button>
+                    </div>
+                    
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+function copyInviteUrl(inviteId) {
+  const input = document.getElementById('invite-' + inviteId);
+  input.select();
+  navigator.clipboard.writeText(input.value).then(() => {
+    alert('Invite link copied!');
+  });
+}
+</script>
