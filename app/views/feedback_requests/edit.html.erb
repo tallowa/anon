@@ -1,0 +1,123 @@
+<div class="min-h-screen bg-gray-50">
+  <nav class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <%= link_to "← Back to Request", feedback_request_path(@feedback_request), class: "text-gray-700 hover:text-gray-900" %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+      <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-6">
+            Edit Feedback Questions
+          </h3>
+          
+          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+            <p class="text-sm text-yellow-700">
+              ⚠️ <strong>Note:</strong> If people have already submitted feedback, changing questions won't affect their responses.
+            </p>
+          </div>
+
+          <%= form_with model: @feedback_request, url: feedback_request_path(@feedback_request), method: :patch, data: { turbo: false }, class: "space-y-6" do |f| %>
+            <div id="questions-container">
+              <% @feedback_request.questions.each_with_index do |question, index| %>
+                <div class="question-field mb-4" data-index="<%= index %>">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Question <%= index + 1 %>
+                  </label>
+                  <div class="flex space-x-2">
+                    <%= text_field_tag "feedback_feedback_request[questions][#{index}][text]", 
+                        question['text'],
+                        class: "flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md",
+                        required: true %>
+                    
+                    <% if index >= 2 %>
+                      <button type="button" 
+                              onclick="removeQuestion(this)"
+                              class="inline-flex items-center px-3 py-2 border border-red-300 shadow-sm text-sm leading-4 font-medium rounded-md text-red-700 bg-white hover:bg-red-50">
+                        Remove
+                      </button>
+                    <% end %>
+                  </div>
+                  <%= hidden_field_tag "feedback_feedback_request[questions][#{index}][id]", question['id'] %>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="flex justify-between items-center pt-4 border-t">
+              <button type="button" 
+                      onclick="addQuestion()"
+                      class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                Add Question
+              </button>
+
+              <%= f.submit "Save Changes", 
+                  class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let questionCount = <%= @feedback_request.questions.length %>;
+
+function addQuestion() {
+  if (questionCount >= 6) {
+    alert('Maximum 6 questions allowed');
+    return;
+  }
+  
+  const container = document.getElementById('questions-container');
+  const newIndex = questionCount;
+  
+  const questionHtml = `
+    <div class="question-field mb-4" data-index="${newIndex}">
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        Question ${newIndex + 1}
+      </label>
+      <div class="flex space-x-2">
+        <input type="text" 
+               name="feedback_feedback_request[questions][${newIndex}][text]"
+               class="flex-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+               required>
+        <button type="button" 
+                onclick="removeQuestion(this)"
+                class="inline-flex items-center px-3 py-2 border border-red-300 shadow-sm text-sm leading-4 font-medium rounded-md text-red-700 bg-white hover:bg-red-50">
+          Remove
+        </button>
+      </div>
+      <input type="hidden" name="feedback_feedback_request[questions][${newIndex}][id]" value="${newIndex + 1}">
+    </div>
+  `;
+  
+  container.insertAdjacentHTML('beforeend', questionHtml);
+  questionCount++;
+  updateQuestionNumbers();
+}
+
+function removeQuestion(button) {
+  const questionField = button.closest('.question-field');
+  questionField.remove();
+  questionCount--;
+  updateQuestionNumbers();
+}
+
+function updateQuestionNumbers() {
+  const questions = document.querySelectorAll('.question-field');
+  questions.forEach((question, index) => {
+    const label = question.querySelector('label');
+    label.textContent = `Question ${index + 1}`;
+  });
+}
+</script>

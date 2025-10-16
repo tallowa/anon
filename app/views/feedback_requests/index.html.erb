@@ -1,68 +1,93 @@
 <div class="min-h-screen bg-gray-50">
-  <nav class="bg-white shadow">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <%= link_to "← Back to Dashboard", dashboard_path, class: "text-gray-700 hover:text-gray-900" %>
-        </div>
-        <div class="flex items-center space-x-4">
-          <%= link_to "My Feedback", my_feedback_path, class: "text-gray-700 hover:text-gray-900" %>
-          <%= link_to "Invite Team", invites_path, class: "text-gray-700 hover:text-gray-900" %>
-          <%= button_to "Logout", logout_path, method: :delete, class: "text-gray-700 hover:text-gray-900" %>
-        </div>
-      </div>
-    </div>
-  </nav>
-
+  <%= render 'shared/nav' %>
   <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
     <div class="px-4 py-6 sm:px-0">
       <div class="mb-8">
-        <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="sm:flex sm:items-center sm:justify-between mb-6">
           <h2 class="text-2xl font-bold text-gray-900">My Feedback Requests</h2>
-          <%= button_to "Create New Request", feedback_requests_path, method: :post,
-              class: "mt-4 sm:mt-0 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+          <%= link_to new_feedback_request_path,
+              class: "mt-4 sm:mt-0 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>
+            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+            Create New Request
+          <% end %>
+        </div>
+
+        <!-- Tabs -->
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8">
+            <%= link_to feedback_requests_path, 
+                class: "#{@show_archived ? 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' : 'border-indigo-500 text-indigo-600'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" do %>
+              Active
+              <span class="ml-2 py-0.5 px-2 rounded-full text-xs font-medium <%= @show_archived ? 'bg-gray-100 text-gray-900' : 'bg-indigo-100 text-indigo-600' %>">
+                <%= @active_requests.count %>
+              </span>
+            <% end %>
+
+            <%= link_to feedback_requests_path(show: 'archived'),
+                class: "#{@show_archived ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" do %>
+              Archived
+              <span class="ml-2 py-0.5 px-2 rounded-full text-xs font-medium <%= @show_archived ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-900' %>">
+                <%= @archived_requests.count %>
+              </span>
+            <% end %>
+          </nav>
         </div>
       </div>
 
-      <% if @feedback_requests.any? %>
+      <% requests_to_show = @show_archived ? @archived_requests : @active_requests %>
+
+      <% if requests_to_show.any? %>
         <div class="bg-white shadow overflow-hidden sm:rounded-md">
           <ul class="divide-y divide-gray-200">
-            <% @feedback_requests.each do |request| %>
-              <li>
-                <%= link_to feedback_request_path(request), class: "block hover:bg-gray-50" do %>
-                  <div class="px-4 py-4 sm:px-6">
-                    <div class="flex items-center justify-between">
-                      <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-indigo-600 truncate">
-                          <%= request.shareable_url %>
-                        </p>
-                        <div class="mt-2 flex items-center text-sm text-gray-500">
-                          <span class="flex items-center">
-                            <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                            </svg>
-                            <%= request.response_count %> responses
-                          </span>
-                          <span class="mx-2">•</span>
-                          <span>Created <%= time_ago_in_words(request.created_at) %> ago</span>
-                          <span class="mx-2">•</span>
-                          <span>
-                            <% if request.expired? %>
-                              <span class="text-red-600">Expired</span>
-                            <% else %>
-                              Expires <%= time_ago_in_words(request.expires_at) %> from now
-                            <% end %>
-                          </span>
-                        </div>
+            <% requests_to_show.each do |request| %>
+              <li class="px-4 py-4 sm:px-6">
+                <div class="flex items-center justify-between">
+                  <div class="flex-1 min-w-0">
+                    <%= link_to feedback_request_path(request), class: "block hover:bg-gray-50" do %>
+                      <p class="text-sm font-medium text-indigo-600 truncate">
+                        <%= request.shareable_url %>
+                      </p>
+                      <div class="mt-2 flex items-center text-sm text-gray-500">
+                        <span class="flex items-center">
+                          <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                          </svg>
+                          <%= request.response_count %> responses
+                        </span>
+                        <span class="mx-2">•</span>
+                        <span>Created <%= time_ago_in_words(request.created_at) %> ago</span>
+                        <span class="mx-2">•</span>
+                        <span>
+                          <% if request.expired? %>
+                            <span class="text-red-600">Expired</span>
+                          <% else %>
+                            Expires <%= time_ago_in_words(request.expires_at) %> from now
+                          <% end %>
+                        </span>
                       </div>
-                      <div class="ml-5 flex-shrink-0">
-                        <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                      </div>
-                    </div>
+                    <% end %>
                   </div>
-                <% end %>
+                  
+                  <div class="ml-5 flex-shrink-0 flex items-center space-x-2">
+                    <% if @show_archived %>
+                      <%= button_to "Restore", unarchive_feedback_request_path(request), method: :patch,
+                          data: { turbo: false },
+                          class: "inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50" %>
+                    <% else %>
+                      <%= button_to "Archive", archive_feedback_request_path(request), method: :patch,
+                          data: { turbo: false, confirm: "Archive this request?" },
+                          class: "inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50" %>
+                    <% end %>
+                    
+                    <%= link_to feedback_request_path(request), class: "inline-flex items-center" do %>
+                      <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                    <% end %>
+                  </div>
+                </div>
               </li>
             <% end %>
           </ul>
@@ -73,17 +98,24 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">No feedback requests</h3>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">
+              <%= @show_archived ? "No archived requests" : "No feedback requests" %>
+            </h3>
             <p class="mt-1 text-sm text-gray-500">
-              Get started by creating a new feedback request.
+              <%= @show_archived ? "Your archived requests will appear here." : "Get started by creating a new feedback request." %>
             </p>
-            <div class="mt-6">
-              <%= button_to "Create Your First Request", feedback_requests_path, method: :post,
-                  class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-            </div>
+            <% unless @show_archived %>
+              <div class="mt-6">
+                <%= link_to new_feedback_request_path,
+                    class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" do %>
+                  Create Your First Request
+                <% end %>
+              </div>
+            <% end %>
           </div>
         </div>
       <% end %>
     </div>
   </div>
 </div>
+<%= render 'shared/mobile_menu_script' %>
