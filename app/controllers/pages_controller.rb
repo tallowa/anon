@@ -1,7 +1,14 @@
 class PagesController < ApplicationController
+  
   def home
-    if logged_in?
-      redirect_to dashboard_path
-    end
+    redirect_to dashboard_path if logged_in?
   end
+  
+  def pricing
+    redirect_to dashboard_path if logged_in?
+  end
+  
+  def about
+  end
+  
 end

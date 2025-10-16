@@ -1,0 +1,45 @@
+<nav class="bg-white shadow">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <% if local_assigns[:back_link] %>
+          <%= link_to back_link[:text], back_link[:path], class: "text-gray-700 hover:text-gray-900" %>
+        <% else %>
+          <h1 class="text-xl font-bold">Anonymous Feedback</h1>
+        <% end %>
+      </div>
+      
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-4">
+        <%= link_to current_user.display_name, dashboard_path, class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
+        <%= link_to "My Feedback", my_feedback_path, class: "text-gray-700 hover:text-gray-900" %>
+        <%= link_to "Requests", feedback_requests_path, class: "text-gray-700 hover:text-gray-900" %>
+        <%= link_to "Invite Team", invites_path, class: "text-gray-700 hover:text-gray-900" %>
+        <%= button_to "Logout", logout_path, method: :delete, class: "text-gray-700 hover:text-gray-900" %>
+      </div>
+      
+      <!-- Mobile menu button -->
+      <div class="md:hidden flex items-center">
+        <button type="button" onclick="toggleMobileMenu()" class="text-gray-700 hover:text-gray-900 focus:outline-none">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <div class="px-3 py-2 text-sm font-medium text-gray-900">
+        <%= current_user.display_name %>
+      </div>
+      <%= link_to "Dashboard", dashboard_path, class: "block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md" %>
+      <%= link_to "My Feedback", my_feedback_path, class: "block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md" %>
+      <%= link_to "Requests", feedback_requests_path, class: "block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md" %>
+      <%= link_to "Invite Team", invites_path, class: "block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md" %>
+      <%= button_to "Logout", logout_path, method: :delete, class: "block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md" %>
+    </div>
+  </div>
+</nav>

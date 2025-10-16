@@ -1,15 +1,17 @@
 class CleanupMetadataJob < ApplicationJob
-  queue_as :security
-  
-  def perform(response_id)
-    response = Feedback::FeedbackResponse.find_by(id: response_id)
+  queue_as :default
+
+  def perform(feedback_response_id)
+    response = Feedback::FeedbackResponse.find_by(id: feedback_response_id)
+    
     return unless response
     
-    response.update!(
+    # Delete identifying metadata after 24 hours
+    response.update_columns(
       ip_address: nil,
       user_agent: nil
     )
     
-    Rails.logger.info "Cleaned metadata for response #{response_id}"
+    Rails.logger.info "Cleaned metadata for FeedbackResponse ##{feedback_response_id}"
   end
 end

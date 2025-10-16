@@ -1,5 +1,15 @@
 source "https://rubygems.org"
+gem "csv"
+gem "rails-erd"
+gem "chartkick"
+gem "groupdate"
+# PDF generation
+gem "prawn"
+gem "prawn-table"
+#gem "sentimental"
+gem "vader_sentiment_ruby"
 
+# CSV is built into Ruby, no gem needed
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.3"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
@@ -56,6 +66,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "letter_opener_web", "~> 2.0"
+  gem "annotate"
 end
 
 group :test do

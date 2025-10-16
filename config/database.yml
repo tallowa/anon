@@ -29,11 +29,9 @@ test:
 production:
   primary:
     <<: *default
-    database: feedback_identity_prod
-    url: <%= ENV['PRIMARY_DATABASE_URL'] %>
+    url: <%= ENV['DATABASE_URL'] %>
   
   feedback:
     <<: *default
-    database: feedback_anonymous_prod
     url: <%= ENV['FEEDBACK_DATABASE_URL'] %>
     migrations_paths: db/feedback_migrate

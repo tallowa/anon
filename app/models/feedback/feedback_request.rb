@@ -9,7 +9,7 @@ module Feedback
     validates :expires_at, presence: true
     
     before_validation :generate_token, on: :create
-    before_validation :set_default_questions, on: :create
+    before_validation :ensure_questions_is_array
     
     scope :active, -> { where('expires_at > ?', Time.current).where(active: true) }
     scope :expired, -> { where('expires_at <= ?', Time.current) }
@@ -26,6 +26,20 @@ module Feedback
       "#{ENV.fetch('APP_URL', 'http://localhost:3000')}/feedback/#{token}"
     end
     
+    # Ensure questions is always an array
+    def questions
+      value = read_attribute(:questions)
+      return default_questions if value.blank?
+      return value if value.is_a?(Array)
+      
+      # If it's a string, try to parse it
+      begin
+        JSON.parse(value)
+      rescue
+        default_questions
+      end
+    end
+    
     private
     
     def generate_token
@@ -33,12 +47,16 @@ module Feedback
       self.expires_at = 30.days.from_now
     end
     
-    def set_default_questions
-      self.questions ||= [
-        { id: 1, text: "What should this person keep doing?" },
-        { id: 2, text: "What's one area where they could improve?" },
-        { id: 3, text: "How effectively do they communicate?" },
-        { id: 4, text: "Any additional thoughts?" }
+    def ensure_questions_is_array
+      self.questions = default_questions if read_attribute(:questions).blank?
+    end
+    
+    def default_questions
+      [
+        { 'id' => 1, 'text' => "What should this person keep doing?" },
+        { 'id' => 2, 'text' => "What's one area where they could improve?" },
+        { 'id' => 3, 'text' => "How effectively do they communicate?" },
+        { 'id' => 4, 'text' => "Any additional thoughts?" }
       ]
     end
   end

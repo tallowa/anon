@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_11_015648) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_15_232252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,7 +22,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_11_015648) do
     t.datetime "updated_at", null: false
     t.string "logo_url"
     t.integer "max_users", default: 50
+    t.string "email_domain"
     t.index ["domain"], name: "index_companies_on_domain", unique: true
+    t.index ["email_domain"], name: "index_companies_on_email_domain"
   end
 
   create_table "invites", force: :cascade do |t|
@@ -35,6 +37,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_11_015648) do
     t.datetime "accepted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "accepted_by_user_id"
+    t.index ["accepted_by_user_id"], name: "index_invites_on_accepted_by_user_id"
     t.index ["company_id"], name: "index_invites_on_company_id"
     t.index ["email"], name: "index_invites_on_email"
     t.index ["invited_by_id"], name: "index_invites_on_invited_by_id"
@@ -51,7 +55,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_11_015648) do
     t.datetime "last_sign_in_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
+    t.string "first_name"
+    t.string "last_name"
     t.index ["company_id"], name: "index_users_on_company_id"
+    t.index ["email"], name: "index_users_on_email"
     t.index ["email_hash"], name: "index_users_on_email_hash", unique: true
   end
 

@@ -11,8 +11,6 @@ module Identity
     validates :email_hash, presence: true, uniqueness: true
     validates :password, length: { minimum: 8 }, if: :password_digest_changed?
     
-    attr_accessor :email
-    
     validates :email, presence: true, on: :create
     validate :email_matches_company_domain, on: :create
     
@@ -28,6 +26,17 @@ module Identity
       verification_tokens.email_verification.create!(token_type: 'email_verification')
     end
     
+    # Add this method for displaying user name in navigation
+    def display_name
+      if first_name.present? || last_name.present?
+        "#{first_name} #{last_name}".strip
+      elsif job_title.present?
+        job_title
+      else
+        email&.split('@')&.first || "User"
+      end
+    end
+    
     before_validation :hash_email, on: :create
     
     private
@@ -39,9 +48,13 @@ module Identity
     
     def email_matches_company_domain
       return unless email.present?
-      unless email.end_with?(company.email_domain)
-        errors.add(:email, "must be from #{company.email_domain}")
+      return unless company.present?
+  
+      # Use email_domain
+      unless email.end_with?("@#{company.email_domain}")
+        errors.add(:email, "must be from @#{company.email_domain}")
       end
     end
+
   end
 end

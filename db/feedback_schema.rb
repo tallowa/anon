@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_200455) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_15_005510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -33,7 +33,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_200455) do
     t.integer "response_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "archived", default: false
     t.index ["anonymous_profile_id"], name: "index_feedback_requests_on_anonymous_profile_id"
+    t.index ["archived"], name: "index_feedback_requests_on_archived"
     t.index ["expires_at"], name: "index_feedback_requests_on_expires_at"
     t.index ["token"], name: "index_feedback_requests_on_token", unique: true
   end
@@ -49,10 +51,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_200455) do
     t.string "flag_reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "content_length"
+    t.jsonb "question_responses", default: {}
+    t.float "sentiment_score"
+    t.string "sentiment_label"
     t.index ["created_at"], name: "index_feedback_responses_on_created_at"
     t.index ["feedback_request_id"], name: "index_feedback_responses_on_feedback_request_id"
     t.index ["flagged"], name: "index_feedback_responses_on_flagged"
     t.index ["response_hash"], name: "index_feedback_responses_on_response_hash", unique: true
+    t.index ["sentiment_label"], name: "index_feedback_responses_on_sentiment_label"
   end
 
   add_foreign_key "feedback_requests", "anonymous_profiles"

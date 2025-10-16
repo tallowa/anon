@@ -2,30 +2,26 @@ class InvitesController < ApplicationController
   before_action :require_login
   
   def index
-    @invites = current_user.company.invites.order(created_at: :desc)
-    @pending_invites = @invites.pending
+    @pending_invites = current_user.company.invites.pending.order(created_at: :desc)
+    @accepted_invites = current_user.company.invites.accepted.order(accepted_at: :desc)
+    @expired_invites = current_user.company.invites.expired.order(created_at: :desc)
+  end
+  
+  def new
+    @invite = current_user.company.invites.build
   end
   
   def create
-    unless current_user.company.can_add_users?
-      redirect_to invites_path, alert: "User limit reached for your company"
-      return
-    end
-    
-    @invite = current_user.sent_invites.build(invite_params)
-    @invite.company = current_user.company
+    @invite = current_user.company.invites.build(invite_params)
+    @invite.invited_by = current_user
     
     if @invite.save
-      # In production, send email here with the invite link
-      invite_url = register_url(@invite.token)
+      # Send invitation email
+      InviteMailer.team_invitation(@invite).deliver_later
       
-      flash[:notice] = "Invite sent! Share this link: #{invite_url}"
-      redirect_to invites_path
+      redirect_to invites_path, notice: "Invitation sent to #{@invite.email}"
     else
-      @invites = current_user.company.invites.order(created_at: :desc)
-      @pending_invites = @invites.pending
-      flash.now[:alert] = @invite.errors.full_messages.join(", ")
-      render :index, status: :unprocessable_entity      
+      render :new, status: :unprocessable_entity
     end
   end
   

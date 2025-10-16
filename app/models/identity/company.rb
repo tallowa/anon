@@ -6,15 +6,24 @@ module Identity
     has_many :invites, dependent: :destroy
     
     validates :name, presence: true
-    validates :domain, presence: true, uniqueness: true
-    validates :domain, format: { with: /\A[a-z0-9-]+\.[a-z]{2,}\z/i }
+    validates :email_domain, presence: true, uniqueness: true
     
-    def email_domain
-      "@#{domain}"
+    before_validation :normalize_and_sync_domain
+    
+    # Check if an email belongs to this company's domain
+    def owns_email?(email)
+      email.to_s.downcase.end_with?("@#{email_domain}")
     end
     
-    def can_add_users?
-      users.count < max_users
+    private
+    
+    def normalize_and_sync_domain
+      if email_domain.present?
+        # Normalize
+        self.email_domain = email_domain.to_s.downcase.strip.gsub(/^@/, '')
+        # Sync to domain column
+        self.domain = self.email_domain
+      end
     end
   end
 end

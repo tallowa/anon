@@ -3,8 +3,18 @@ class DashboardController < ApplicationController
   
   def index
     @anonymous_profile = find_or_create_anonymous_profile
-    @recent_requests = @anonymous_profile.feedback_requests.order(created_at: :desc).limit(5)
+    
+    # Only count ACTIVE (non-archived) requests
+    @active_requests_count = @anonymous_profile.feedback_requests.where(archived: false).count
+    
+    # Get recent active requests
+    @recent_requests = @anonymous_profile.feedback_requests
+      .where(archived: false)
+      .order(created_at: :desc)
+      .limit(5)
+    
     @total_responses = @anonymous_profile.total_responses
+    @can_view_feedback = @anonymous_profile.can_view_feedback?
   end
   
   private
