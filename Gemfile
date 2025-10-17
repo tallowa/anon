@@ -1,6 +1,9 @@
 source "https://rubygems.org"
 ruby "3.4.5"
 
+gem "dotenv-rails", groups: [:development, :test]
+# Stripe payments
+gem "stripe"
 gem "csv"
 gem "rails-erd"
 gem "chartkick"
