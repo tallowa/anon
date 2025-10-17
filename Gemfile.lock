@@ -113,7 +113,7 @@ GEM
     dotenv (3.1.8)
     drb (2.2.3)
     ed25519 (1.4.0)
-    erb (5.0.3)
+    erb (5.1.1)
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
@@ -157,10 +157,10 @@ GEM
       logger (~> 1.6)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
-    letter_opener_web (2.0.0)
-      actionmailer (>= 5.2)
-      letter_opener (~> 1.7)
-      railties (>= 5.2)
+    letter_opener_web (3.0.0)
+      actionmailer (>= 6.1)
+      letter_opener (~> 1.9)
+      railties (>= 6.1)
       rexml
     lint_roller (1.1.0)
     logger (1.7.0)
@@ -427,7 +427,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
-  letter_opener_web (~> 2.0)
+  letter_opener_web (~> 3.0)
   pg (~> 1.1)
   prawn
   prawn-table
