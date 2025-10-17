@@ -30,7 +30,11 @@ production:
   primary:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
-  
+
+  cable:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
+      
   feedback:
     <<: *default
     url: <%= ENV['FEEDBACK_DATABASE_URL'] %>
