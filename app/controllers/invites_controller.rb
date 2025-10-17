@@ -17,7 +17,7 @@ class InvitesController < ApplicationController
     
     if @invite.save
       # Send invitation email
-      InviteMailer.team_invitation(@invite).deliver_later
+      InviteMailer.team_invitation(@invite).deliver_now
       
       redirect_to invites_path, notice: "Invitation sent to #{@invite.email}"
     else

@@ -71,7 +71,7 @@ class PublicFeedbackController < ApplicationController
       if user.anonymous_profile_id == profile.profile_hash
         # Only send email if user has an email address
         if user.email.present?
-          FeedbackMailer.new_feedback_notification(user, @feedback_response).deliver_later
+          FeedbackMailer.new_feedback_notification(user, @feedback_response).deliver_now
         else
           Rails.logger.info "Skipping email notification - user #{user.id} has no email"
         end
