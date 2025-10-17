@@ -10,7 +10,7 @@ module Feedback
     before_validation :generate_response_hash, on: :create
     before_validation :set_content_length
     before_create :analyze_sentiment
-    after_create :schedule_metadata_cleanup
+    #after_create :schedule_metadata_cleanup
     
     scope :recent, -> { order(created_at: :desc) }
     scope :positive, -> { where(sentiment_label: 'positive') }
