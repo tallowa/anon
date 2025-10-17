@@ -27,7 +27,7 @@ module Identity
       'pro' => {
         name: 'Professional',
         price: 15,
-        price_id: 'price_test_pro', # We'll create this in Stripe dashboard
+        price_id: 'price_1SJLuXBgOJAUH6IRBpsG0mhG', # Real Stripe ID
         max_active_requests: nil, # unlimited
         max_responses_per_month: nil, # unlimited
         features: ['basic_analytics', 'custom_questions', 'exports', 'sentiment_analysis', '90_day_history']
@@ -35,7 +35,7 @@ module Identity
       'team' => {
         name: 'Team',
         price: 49,
-        price_id: 'price_test_team', # We'll create this in Stripe dashboard
+        price_id: 'price_1SJM1nBgOJAUH6IR6VG7yItT', # Real Stripe Id
         max_active_requests: nil,
         max_responses_per_month: nil,
         features: ['everything_in_pro', 'unlimited_members', 'team_dashboard', 'theme_extraction', 'unlimited_history']
