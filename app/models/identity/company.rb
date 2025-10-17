@@ -97,7 +97,7 @@ module Identity
         }
       )
       
-      update!(stripe_customer_id: customer.id)
+      update_column!(stripe_customer_id: customer.id)
       customer
     end
         
