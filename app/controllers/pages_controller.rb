@@ -5,7 +5,6 @@ class PagesController < ApplicationController
   end
   
   def pricing
-    redirect_to dashboard_path if logged_in?
   end
   
   def about
