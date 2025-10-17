@@ -1,7 +1,7 @@
 class SentimentAnalyzer
   def initialize(text)
     @text = text
-    @analyzer = Sentimental.new
+    @analyzer = Sentimental.new  # This is the VADER gem
   end
   
   def analyze

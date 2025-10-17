@@ -73,6 +73,9 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
   # config.action_mailer.default_url_options = { host: "example.com" }
+  config.action_mailer.default_url_options = { host: 'anonymous-feedback-app-79b70dc6adc9.herokuapp.com', protocol: 'https' }
+
+  Rails.application.routes.default_url_options = { host: 'anonymous-feedback-app-79b70dc6adc9.herokuapp.com', protocol: 'https' }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
