@@ -1,6 +1,18 @@
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
+# Subscriptions
+post "subscriptions/create", to: "subscriptions#create", as: :create_subscription
+get "subscriptions/success", to: "subscriptions#success", as: :subscription_success
+get "subscriptions/cancel", to: "subscriptions#cancel", as: :subscription_cancel
+post "billing-portal", to: "subscriptions#billing_portal", as: :billing_portal
+
+# Stripe webhooks
+post "webhooks/stripe", to: "webhooks#stripe"
+
+
+
+
 # View Received Feedback (authenticated)
 get "my-feedback", to: "feedback_summaries#show"
 get "my-feedback/export/pdf", to: "feedback_summaries#export_pdf", as: :export_feedback_pdf

@@ -94,7 +94,18 @@
           </p>
           <p class="mt-2 text-sm text-gray-500">or $150/year (save $30)</p>
           <%= link_to "Start 14-Day Trial", signup_path, class: "mt-8 block w-full bg-indigo-600 text-white rounded-md py-2 text-sm font-semibold text-center hover:bg-indigo-700" %>
+           <% if logged_in? %>
+              <% if current_user.company.subscription_tier == 'pro' %>
+                <%= link_to "Current Plan", dashboard_path, class: "mt-8 block w-full bg-gray-300 text-gray-700 rounded-md py-2 text-sm font-semibold text-center cursor-not-allowed" %>
+              <% else %>
+                <%= button_to "Upgrade to Pro", create_subscription_path(tier: 'pro'), method: :post, class: "mt-8 block w-full bg-indigo-600 text-white rounded-md py-2 text-sm font-semibold text-center hover:bg-indigo-700" %>
+              <% end %>
+            <% else %>
+              <%= link_to "Start 14-Day Trial", signup_path, class: "mt-8 block w-full bg-indigo-600 text-white rounded-md py-2 text-sm font-semibold text-center hover:bg-indigo-700" %>
+            <% end %>
         </div>
+        </div>
+        
         <div class="px-6 pt-6 pb-8 border-t border-gray-200">
           <p class="text-xs font-semibold text-gray-900 uppercase tracking-wide mb-4">Everything in Individual, plus:</p>
           <ul class="space-y-4">
@@ -141,7 +152,15 @@
             <span class="text-4xl font-extrabold text-gray-900">$49</span>
             <span class="text-base font-medium text-gray-500">/month</span>
           </p>
-          <%= link_to "Start 14-Day Trial", signup_path, class: "mt-8 block w-full bg-indigo-600 text-white rounded-md py-2 text-sm font-semibold text-center hover:bg-indigo-700" %>
+           <% if logged_in? %>
+              <% if current_user.company.subscription_tier == 'team' %>
+                <%= link_to "Current Plan", dashboard_path, class: "mt-8 block w-full bg-gray-300 text-gray-700 rounded-md py-2 text-sm font-semibold text-center cursor-not-allowed" %>
+              <% else %>
+                <%= button_to "Upgrade to Team", create_subscription_path(tier: 'team'), method: :post, class: "mt-8 block w-full bg-indigo-600 text-white rounded-md py-2 text-sm font-semibold text-center hover:bg-indigo-700" %>
+              <% end %>
+          <% else %>
+              <%= link_to "Start 14-Day Trial", signup_path, class: "mt-8 block w-full bg-indigo-600 text-white rounded-md py-2 text-sm font-semibold text-center hover:bg-indigo-700" %>
+          <% end %>
         </div>
       </div>
 
