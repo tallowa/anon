@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "3.3.9"
+ruby "3.4.5"
 
 gem "csv"
 gem "rails-erd"
@@ -9,8 +9,8 @@ gem "groupdate"
 gem "prawn"
 gem "prawn-table"
 #gem "sentimental"
-gem "vader_sentiment_ruby"
-
+#gem "vader_sentiment_ruby"
+#gem "vaderSentiment"
 # CSV is built into Ruby, no gem needed
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.3"

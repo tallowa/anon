@@ -388,7 +388,6 @@ GEM
     unicode-emoji (4.1.0)
     uri (1.0.4)
     useragent (0.16.11)
-    vader_sentiment_ruby (0.1.1)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -445,8 +444,10 @@ DEPENDENCIES
   thruster
   turbo-rails
   tzinfo-data
-  vader_sentiment_ruby
   web-console
+
+RUBY VERSION
+   ruby 3.4.5p51
 
 BUNDLED WITH
    2.7.2
