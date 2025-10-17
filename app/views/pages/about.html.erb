@@ -1,0 +1,107 @@
+<div class="bg-white">
+  <!-- Navigation -->
+  <nav class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <%= link_to root_path do %>
+            <h1 class="text-2xl font-bold text-indigo-600">Anonymous Feedback</h1>
+          <% end %>
+        </div>
+        <div class="flex items-center space-x-4">
+          <%= link_to "Pricing", pricing_path, class: "text-gray-700 hover:text-gray-900" %>
+          <%= link_to "About", about_path, class: "text-indigo-600 font-medium" %>
+          <% if logged_in? %>
+            <%= link_to "Dashboard", dashboard_path, class: "text-gray-700 hover:text-gray-900" %>
+            <%= button_to "Logout", logout_path, method: :delete, class: "text-gray-700 hover:text-gray-900" %>
+          <% else %>
+            <%= link_to "Log In", login_path, class: "text-gray-700 hover:text-gray-900" %>
+            <%= link_to "Get Started", signup_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="bg-gradient-to-br from-indigo-500 to-purple-600 py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl font-extrabold text-white sm:text-5xl">
+        About Anonymous Feedback
+      </h1>
+      <p class="mt-4 text-xl text-indigo-100">
+        Building a culture of honest, constructive feedback
+      </p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="prose prose-lg mx-auto">
+      <h2>Our Mission</h2>
+      <p>
+        We believe that honest feedback is essential for personal and professional growth. 
+        But traditional feedback systems often fail because people fear retaliation or judgment.
+      </p>
+      <p>
+        Anonymous Feedback solves this by creating a truly anonymous platform where team members 
+        can give honest, constructive feedback without fear. Our multi-database architecture 
+        ensures that feedback can never be traced back to individuals—not even by us.
+      </p>
+
+      <h2>How It Works</h2>
+      <p>
+        Our platform uses a unique two-database architecture:
+      </p>
+      <ul>
+        <li><strong>Identity Database:</strong> Stores user accounts and company information</li>
+        <li><strong>Feedback Database:</strong> Stores all feedback responses</li>
+      </ul>
+      <p>
+        These databases are completely separate, with no foreign keys or direct links between them. 
+        We use cryptographic hashing to ensure anonymity while still allowing you to view your 
+        aggregated feedback once you've received at least 3 responses.
+      </p>
+
+      <h2>Privacy First</h2>
+      <p>
+        Privacy and anonymity are at the core of everything we do:
+      </p>
+      <ul>
+        <li>Multi-database architecture prevents tracing feedback to individuals</li>
+        <li>Metadata (IP addresses, user agents) automatically deleted after 24 hours</li>
+        <li>Minimum 3-response threshold before feedback is revealed</li>
+        <li>No tracking, no analytics on feedback submitters</li>
+        <li>Fuzzy timestamps ("a few days ago" instead of exact times)</li>
+      </ul>
+
+      <h2>Built for Teams</h2>
+      <p>
+        Whether you're a team of 5 or 500, Anonymous Feedback helps you:
+      </p>
+      <ul>
+        <li>Create a culture of continuous improvement</li>
+        <li>Get honest insights about your performance</li>
+        <li>Identify strengths and areas for growth</li>
+        <li>Make feedback a regular part of your workflow</li>
+      </ul>
+
+      <h2>Contact Us</h2>
+      <p>
+        Have questions? Want to learn more? Reach out to us at:
+      </p>
+      <p>
+        <strong>Email:</strong> <a href="mailto:support@anonymousfeedback.com">support@anonymousfeedback.com</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div class="text-center text-gray-500">
+        <p>&copy; <%= Time.current.year %> Anonymous Feedback. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
