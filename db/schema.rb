@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_232252) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_17_214000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,8 +23,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_232252) do
     t.string "logo_url"
     t.integer "max_users", default: 50
     t.string "email_domain"
+    t.string "subscription_tier", default: "free"
+    t.string "stripe_customer_id"
+    t.string "stripe_subscription_id"
+    t.string "subscription_status"
+    t.datetime "trial_ends_at"
+    t.datetime "subscription_ends_at"
     t.index ["domain"], name: "index_companies_on_domain", unique: true
     t.index ["email_domain"], name: "index_companies_on_email_domain"
+    t.index ["stripe_customer_id"], name: "index_companies_on_stripe_customer_id"
+    t.index ["stripe_subscription_id"], name: "index_companies_on_stripe_subscription_id"
+    t.index ["subscription_tier"], name: "index_companies_on_subscription_tier"
   end
 
   create_table "invites", force: :cascade do |t|
